@@ -6,6 +6,8 @@ from app.auth.oauth2 import get_current_user
 from app.database.mongodb import db
 from app.schemas.project_schema import ProjectCreate
 
+
+from app.ingestion.gitingest_service import ingest_repository
 router = APIRouter(
     prefix="/repository",
     tags=["Repository"]
@@ -35,13 +37,16 @@ def index_repository(
             detail="Repository already added."
         )
 
+    ingestion_result = ingest_repository(repo_url)
     project_data = {
-        "userId": str(current_user["_id"]),
-        "repoName": repo_name,
-        "repoURL": repo_url,
-        "summary": "",
-        "createdAt": datetime.utcnow()
-    }
+    "userId": str(current_user["_id"]),
+    "repoName": repo_name,
+    "repoURL": repo_url,
+    "summary": ingestion_result["summary"],
+    "tree": ingestion_result["tree"],
+    "content": ingestion_result["content"],
+    "createdAt": datetime.utcnow()
+   }
 
     result = db.projects.insert_one(project_data)
 
