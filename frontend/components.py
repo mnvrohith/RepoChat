@@ -1,4 +1,6 @@
 import streamlit as st
+import streamlit.components.v1 as components
+
 
 
 def render_chat(messages):
@@ -11,6 +13,7 @@ def render_chat(messages):
         with st.chat_message(message["role"]):
 
             st.markdown(message["content"])
+           
 
             # Show sources only for assistant messages
             if (

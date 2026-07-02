@@ -2,92 +2,227 @@ def load_css():
     return """
 <style>
 
-/* Hide Streamlit default UI */
+/* =========================
+   Hide Streamlit Branding
+========================= */
 
 #MainMenu {visibility:hidden;}
 footer {visibility:hidden;}
 header {visibility:hidden;}
 
 
-/* Background */
+/* =========================
+   Global
+========================= */
+
+html, body, [class*="css"] {
+    font-family: Inter, "Segoe UI", sans-serif;
+}
 
 .stApp{
-    background-color:#0D1117;
+    background:#0D1117;
+    color:#E6EDF3;
+}
+
+
+/* =========================
+   Sidebar
+========================= */
+
+section[data-testid="stSidebar"]{
+    background:#161B22;
+    border-right:1px solid #30363D;
+}
+
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3{
     color:white;
 }
 
 
-/* Sidebar */
+/* =========================
+   Headers
+========================= */
 
-section[data-testid="stSidebar"]{
-    background-color:#161B22;
+h1{
+    color:#F0F6FC;
+    font-weight:700;
+}
+
+h2,h3{
+    color:#E6EDF3;
+}
+
+p,label{
+    color:#C9D1D9;
 }
 
 
-/* Buttons */
+/* =========================
+   Buttons
+========================= */
 
-.stButton > button{
+.stButton>button{
+
     width:100%;
     background:#238636;
     color:white;
+
     border:none;
-    border-radius:8px;
-    padding:10px;
-    font-weight:bold;
+    border-radius:10px;
+
+    padding:12px 16px;
+
+    font-size:15px;
+    font-weight:600;
+
+    transition:all .25s ease;
 }
 
-.stButton > button:hover{
+.stButton>button:hover{
+
     background:#2EA043;
+
+    transform:translateY(-1px);
+
+    box-shadow:0 0 12px rgba(46,160,67,.35);
+
+    cursor:pointer;
 }
 
 
-/* Inputs */
+/* =========================
+   Text Input
+========================= */
 
 .stTextInput input{
+
     background:#161B22;
+
     color:white;
+
     border:1px solid #30363D;
+
+    border-radius:10px;
 }
 
 
-/* Chat */
+/* =========================
+   Chat Input
+========================= */
 
-.user-message{
+[data-testid="stChatInput"]{
 
-    background:#1F6FEB;
+    border-top:1px solid #30363D;
 
-    padding:15px;
-
-    border-radius:12px;
-
-    margin-bottom:10px;
+    padding-top:12px;
 }
 
 
-.bot-message{
+/* =========================
+   Chat Messages
+========================= */
 
-    background:#21262D;
+[data-testid="stChatMessage"]{
 
-    padding:15px;
+    background:#161B22;
 
-    border-radius:12px;
+    border:1px solid #30363D;
 
-    margin-bottom:15px;
+    border-radius:14px;
+
+    padding:10px;
+
+    margin-bottom:12px;
 }
 
 
-/* Cards */
+/* =========================
+   Repository Card
+========================= */
 
 .repo-card{
 
     background:#161B22;
 
-    padding:18px;
+    border:1px solid #30363D;
 
     border-radius:12px;
 
+    padding:18px;
+
+    margin-bottom:12px;
+}
+
+
+/* =========================
+   Expanders (Sources)
+========================= */
+
+details{
+
+    background:#161B22;
+
     border:1px solid #30363D;
 
+    border-radius:10px;
+
+    padding:8px;
+}
+
+
+/* =========================
+   Code Blocks
+========================= */
+
+code{
+
+    color:#7EE787;
+
+    background:#21262D;
+
+    padding:2px 5px;
+
+    border-radius:5px;
+}
+
+pre{
+
+    background:#161B22 !important;
+
+    border:1px solid #30363D;
+
+    border-radius:10px;
+}
+
+
+/* =========================
+   Divider
+========================= */
+
+hr{
+    border-color:#30363D;
+}
+
+
+/* =========================
+   Success / Warning
+========================= */
+
+.stSuccess{
+
+    border-radius:10px;
+}
+
+.stWarning{
+
+    border-radius:10px;
+}
+
+.stError{
+
+    border-radius:10px;
 }
 
 </style>
