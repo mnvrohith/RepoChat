@@ -5,7 +5,7 @@ from app.services.llm.base import BaseLLM
 from app.services.retriever import Retriever
 
 
-class GeminiService(BaseLLM):
+class GeminiLLM(BaseLLM):
 
     def __init__(self):
 
@@ -24,7 +24,7 @@ You are an expert software engineer.
 
 Answer ONLY from the repository context.
 
-If the answer is not available, say:
+If the answer is not available, reply exactly:
 
 "I couldn't find that information in the repository."
 
@@ -45,10 +45,36 @@ Answer:
 
     def answer_question(self, question: str):
 
-        chunks = self.retriever.retrieve(question)
+        # Retrieve relevant chunks
+        retrieved_chunks = self.retriever.retrieve(question)
 
+        # Build context for Gemini
         context = "\n\n".join(
-            chunk["text"] for chunk in chunks
+    f"""File: {chunk['file_path']}
+Function/Class: {chunk['name']}
+
+{chunk['text']}"""
+    for chunk in retrieved_chunks
+)
+
+        # Generate answer
+        answer = self.generate(
+            question=question,
+            context=context
         )
 
-        return self.generate(question, context)
+        # Build source list
+        sources = [
+    {
+        "file_path": chunk["file_path"],
+        "name": chunk["name"],
+        "score": round(chunk["score"], 4),
+        "text": chunk["text"],
+    }
+    for chunk in retrieved_chunks
+]
+
+        return {
+            "answer": answer,
+            "sources": sources
+        }

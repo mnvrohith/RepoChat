@@ -6,17 +6,18 @@ from app.schemas.request_models import (
 )
 
 from app.services.ingestion_service import IngestionService
-from app.services.llm.gemini import GeminiService
+from app.services.llm.gemini import GeminiLLM
 
 
 router = APIRouter()
 
 ingestion_service = IngestionService()
-llm_service = GeminiService()
+llm_service = GeminiLLM()
 
 
 @router.get("/")
 def home():
+
     return {
         "message": "RepoChat API Running 🚀"
     }
@@ -35,10 +36,8 @@ def ingest_repo(request: IngestRequest):
 @router.post("/chat")
 def chat(request: ChatRequest):
 
-    answer = llm_service.answer_question(
+    result = llm_service.answer_question(
         request.question
     )
 
-    return {
-        "answer": answer
-    }
+    return result
