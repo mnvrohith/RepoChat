@@ -1,5 +1,9 @@
 import google.generativeai as genai
 
+from datetime import datetime, UTC
+from bson import ObjectId
+
+from app.database.mongodb import db
 from app.config.settings import settings
 from app.services.llm.base import BaseLLM
 from app.services.retriever import Retriever
@@ -17,7 +21,11 @@ class GeminiLLM(BaseLLM):
 
         self.retriever = Retriever()
 
-    def generate(self, question: str, context: str):
+    def generate(
+        self,
+        question: str,
+        context: str,
+    ):
 
         prompt = f"""
 You are an expert software engineer.
@@ -43,38 +51,111 @@ Answer:
 
         return response.text
 
-    def answer_question(self, question: str):
+    def answer_question(
+        self,
+        question: str,
+        project_id: str,
+        conversation_id: str,
+    ):
 
-        # Retrieve relevant chunks
-        retrieved_chunks = self.retriever.retrieve(question)
+        # Retrieve relevant chunks for this project only
+        retrieved_chunks = self.retriever.retrieve(
+            question=question,
+            project_id=project_id,
+        )
 
-        # Build context for Gemini
+        if not retrieved_chunks:
+            return {
+                "answer": "I couldn't find that information in the repository.",
+                "sources": [],
+            }
+
+        # Build context
         context = "\n\n".join(
-    f"""File: {chunk['file_path']}
+            f"""File: {chunk['file_path']}
+
 Function/Class: {chunk['name']}
 
 {chunk['text']}"""
-    for chunk in retrieved_chunks
-)
-
-        # Generate answer
-        answer = self.generate(
-            question=question,
-            context=context
+            for chunk in retrieved_chunks
         )
 
-        # Build source list
-        sources = [
-    {
-        "file_path": chunk["file_path"],
-        "name": chunk["name"],
-        "score": round(chunk["score"], 4),
-        "text": chunk["text"],
-    }
-    for chunk in retrieved_chunks
-]
+        # --------------------------------------------------
+        # Save user message
+        # --------------------------------------------------
+
+        db.messages.insert_one(
+            {
+                "conversation_id": conversation_id,
+                "role": "user",
+                "content": question,
+                "created_at": datetime.now(UTC),
+            }
+        )
+
+        # --------------------------------------------------
+        # Generate answer
+        # --------------------------------------------------
+
+        answer = self.generate(
+            question=question,
+            context=context,
+        )
+
+        # --------------------------------------------------
+        # Save assistant message
+        # --------------------------------------------------
+
+        db.messages.insert_one(
+            {
+                "conversation_id": conversation_id,
+                "role": "assistant",
+                "content": answer,
+                "created_at": datetime.now(UTC),
+            }
+        )
+
+        # --------------------------------------------------
+        # Rename conversation on first message
+        # --------------------------------------------------
+
+        conversation = db.conversations.find_one(
+            {
+                "_id": ObjectId(conversation_id)
+            }
+        )
+
+        if conversation and conversation["title"] == "New Chat":
+
+            db.conversations.update_one(
+                {
+                    "_id": ObjectId(conversation_id)
+                },
+                {
+                    "$set": {
+                        "title": question[:60]
+                    }
+                }
+            )
+
+        # --------------------------------------------------
+        # Build sources
+        # --------------------------------------------------
+
+        sources = []
+
+        for chunk in retrieved_chunks:
+
+            sources.append(
+                {
+                    "file_path": chunk["file_path"],
+                    "name": chunk["name"],
+                    "score": round(chunk["score"], 4),
+                    "text": chunk["text"],
+                }
+            )
 
         return {
             "answer": answer,
-            "sources": sources
+            "sources": sources,
         }

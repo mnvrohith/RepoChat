@@ -10,7 +10,12 @@ class VectorStore:
         result = collection.insert_one(chunk)
         return str(result.inserted_id)
 
-    def search(self, query_embedding, limit=5):
+    def search(
+        self,
+        query_embedding,
+        project_id: str,
+        limit: int = 5,
+    ):
 
         pipeline = [
             {
@@ -20,11 +25,15 @@ class VectorStore:
                     "queryVector": query_embedding,
                     "numCandidates": 100,
                     "limit": limit,
+                    "filter": {
+                        "project_id": project_id
+                    }
                 }
             },
             {
                 "$project": {
                     "_id": 0,
+                    "project_id": 1,
                     "name": 1,
                     "file_path": 1,
                     "text": 1,

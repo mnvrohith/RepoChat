@@ -8,3 +8,12 @@ db = client[settings.DATABASE_NAME]
 
 # Collection to store code chunks
 collection = db["code_chunks"]
+
+
+projects = db["projects"]
+
+users = db["users"]
+
+conversations = db["conversations"]
+
+messages = db["messages"]

@@ -4,31 +4,31 @@ from app.services.vector_store import VectorStore
 
 class Retriever:
     """
-    Retrieves the most relevant code chunks for a user's question.
+    Retrieves the most relevant code chunks
+    for a specific repository.
     """
 
     def __init__(self):
         self.embedding_service = EmbeddingService()
         self.vector_store = VectorStore()
 
-    def retrieve(self, question: str, limit: int = 5):
+    def retrieve(
+        self,
+        question: str,
+        project_id: str,
+        limit: int = 5,
+    ):
         """
-        Retrieve the top-k most relevant chunks.
-
-        Args:
-            question: User's natural language question.
-            limit: Number of chunks to retrieve.
-
-        Returns:
-            List of relevant chunks.
+        Retrieve top-k chunks for one project only.
         """
 
-        # Generate embedding for the user's question
-        query_embedding = self.embedding_service.embed(question)
+        query_embedding = self.embedding_service.embed(
+            question
+        )
 
-        # Search MongoDB Vector Search
         results = self.vector_store.search(
             query_embedding=query_embedding,
+            project_id=project_id,
             limit=limit,
         )
 

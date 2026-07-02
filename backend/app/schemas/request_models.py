@@ -6,4 +6,7 @@ class IngestRequest(BaseModel):
 
 
 class ChatRequest(BaseModel):
+    project_id: str
+    conversation_id: str
     question: str
+    
