@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from google import genai
 
 from datetime import datetime, UTC
 from bson import ObjectId
@@ -13,12 +13,9 @@ class GeminiLLM(BaseLLM):
 
     def __init__(self):
 
-        genai.configure(api_key=settings.GEMINI_API_KEY)
-
-        self.model = genai.GenerativeModel(
-            "gemini-2.5-flash"
+        self.client = genai.Client(
+        api_key=settings.GEMINI_API_KEY
         )
-
         self.retriever = Retriever()
 
     def generate(
@@ -28,28 +25,39 @@ class GeminiLLM(BaseLLM):
     ):
 
         prompt = f"""
-You are an expert software engineer.
+You are RepoChat, an AI assistant that answers questions about GitHub repositories.
 
-Answer ONLY from the repository context.
+Use ONLY the repository context below.
 
-If the answer is not available, reply exactly:
+If the repository context does not contain enough information, reply exactly:
 
 "I couldn't find that information in the repository."
 
-Repository Context:
+Do not guess.
+Do not use outside knowledge.
 
+Repository Context:
 {context}
 
 Question:
-
 {question}
 
 Answer:
 """
 
-        response = self.model.generate_content(prompt)
+        response = self.client.models.generate_content(
+           model="gemini-2.5-flash",
+           contents=prompt,
+           config={
+               "temperature": 0.2,
+               "max_output_tokens": 2048,
+           }
+       )
 
-        return response.text
+        try:
+            return response.text
+        except Exception:
+            return "I couldn't generate an answer."
 
     def answer_question(
         self,
