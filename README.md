@@ -127,6 +127,6 @@ Repository-Aware Answer
 Store Conversation History
 ```
 
-For each question, RepoChat generates an embedding for the query, retrieves the most relevant code chunks through vector search, constructs a context-rich prompt, and generates an answer grounded in the repository. The conversation is then stored for future reference.
+For each question, RepoChat generates an embedding for the query, retrieves the most relevant code chunks through vector search, constructs a context-rich prompt, and generates an answer grounded in the repository. 
 
 AI-powered GitHub Repository RAG Assistant built using FastAPI, Streamlit, MongoDB Atlas, Tree-sitter, gitingest, and Gemini.
