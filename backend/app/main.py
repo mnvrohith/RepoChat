@@ -1,31 +1,12 @@
 from fastapi import FastAPI
 
-from app.config.settings import settings
-from app.database.mongodb import db
+from app.api.routes import router
+
 
 app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
+    title="RepoChat API",
+    version="1.0.0",
 )
 
 
-@app.get("/")
-def root():
-    return {
-        "message": f"Welcome to {settings.APP_NAME} 🚀"
-    }
-
-
-@app.get("/health")
-def health():
-    try:
-        db.command("ping")
-        return {
-            "status": "healthy",
-            "database": "connected"
-        }
-    except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+app.include_router(router)

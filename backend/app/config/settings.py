@@ -6,14 +6,14 @@ class Settings(BaseSettings):
     APP_VERSION: str
     DEBUG: bool
 
-    MONGODB_URI: str = ""
+    MONGODB_URI: str
     DATABASE_NAME: str
 
     JWT_SECRET: str
     JWT_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
-    GEMINI_API_KEY: str = ""
+    GEMINI_API_KEY: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

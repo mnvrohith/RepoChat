@@ -32,6 +32,8 @@ rsa==4.9.1
 six==1.17.0
 starlette==1.3.1
 tiktoken==0.13.0
+tree-sitter==0.26.0
+tree-sitter-python==0.25.0
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 urllib3==2.7.0
