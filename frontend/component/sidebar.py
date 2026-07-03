@@ -1,6 +1,6 @@
 import streamlit as st
 
-from pages.repositories import (
+from component.repositories import (
     add_repository,
     delete_project,
     load_projects,

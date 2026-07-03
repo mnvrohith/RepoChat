@@ -3,13 +3,13 @@ import streamlit as st
 from auth import login_page
 from session import initialize_session
 
-from pages.repositories import load_projects
-from pages.sidebar import render_sidebar
-from pages.conversations import (
+from component.repositories import load_projects
+from component.sidebar import render_sidebar
+from component.conversations import (
     load_conversations,
     render_conversations,
 )
-from pages.chat import render_chat
+from component.chat import render_chat
 
 st.set_page_config(
     page_title="RepoChat",
