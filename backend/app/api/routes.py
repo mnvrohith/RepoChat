@@ -12,8 +12,8 @@ from app.auth.oauth2 import get_current_user
 
 router = APIRouter()
 
-ingestion_service = IngestionService()
-llm_service = GeminiLLM()
+# ingestion_service = IngestionService()
+# llm_service = GeminiLLM()
 
 
 @router.get("/")
@@ -26,27 +26,25 @@ def home():
 @router.post("/ingest")
 def ingest_repo(
     request: IngestRequest,
-    current_user=Depends(get_current_user)
+    current_user=Depends(get_current_user),
 ):
+    ingestion_service = IngestionService()
 
-    result = ingestion_service.ingest_repository(
+    return ingestion_service.ingest_repository(
         repo_url=request.repo_url,
-        user_id=str(current_user["_id"])
+        user_id=str(current_user["_id"]),
     )
-
-    return result
 
 
 @router.post("/chat")
 def chat(
     request: ChatRequest,
-    current_user=Depends(get_current_user)
+    current_user=Depends(get_current_user),
 ):
+    llm_service = GeminiLLM()
 
-    result = llm_service.answer_question(
+    return llm_service.answer_question(
         question=request.question,
         project_id=request.project_id,
         conversation_id=request.conversation_id,
     )
-
-    return result
