@@ -125,7 +125,7 @@ def render_conversations():
 
         return
 
-    st.subheader("💬 Conversations")
+    st.subheader("📜 Conversations")
 
     if st.button(
         "➕ New Chat",

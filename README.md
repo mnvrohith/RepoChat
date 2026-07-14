@@ -48,7 +48,7 @@ RepoChat simplifies this process by combining semantic search with Retrieval-Aug
 | **Authentication** | JWT | Secure user authentication |
 | **Password Security** | bcrypt | Password hashing |
 | **AI SDK** | google-generativeai | Gemini integration |
-| **Embeddings** | sentence-transformers | Embedding generation |
+| **Embeddings** | google gemini embeddings | Embedding generation |
 | **Validation** | Pydantic | Request and response validation |
 | **Database Driver** | PyMongo | MongoDB operations |
 | **Server** | Uvicorn | FastAPI ASGI server |
@@ -62,7 +62,7 @@ RepoChat simplifies this process by combining semantic search with Retrieval-Aug
 - Automatic repository cloning and preprocessing
 - Language-aware code parsing using Tree-sitter
 - Semantic code chunking for efficient retrieval
-- Vector embedding generation using BAAI/bge-small-en-v1.5
+- Vector embedding generation using Google Gemini Embeddings( gemini-embedding-001)
 - Fast semantic search with MongoDB Atlas Vector Search
 - Repository-grounded answers generated using Gemini 2.5 Flash
 - Secure user authentication using JWT
