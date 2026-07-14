@@ -15,6 +15,12 @@ Understand any codebase by asking questions in natural language.
 
 </div>
 
+
+
+<p align="center">
+  <img src="screenshots/repochat.png" width="90%">
+</p>
+
 ---
 
 ## Overview
