@@ -1,5 +1,7 @@
 import streamlit as st
 
+from styles import load_css
+
 from auth import login_page
 from session import initialize_session
 
@@ -16,6 +18,9 @@ st.set_page_config(
     page_icon="💬",
     layout="wide",
 )
+
+
+st.markdown(load_css(), unsafe_allow_html=True)
 
 initialize_session()
 

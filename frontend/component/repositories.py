@@ -33,6 +33,7 @@ def add_repository():
     with st.expander(
         "➕ Add Repository",
         expanded=False,
+    
     ):
 
         repo_url = st.text_input(

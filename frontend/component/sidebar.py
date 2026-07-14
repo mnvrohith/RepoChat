@@ -64,6 +64,7 @@ def render_sidebar():
                 if st.button(
                     "🗑",
                     key=f"delete_{project['project_id']}",
+                    type="secondary",
                 ):
 
                     delete_project(
@@ -75,6 +76,7 @@ def render_sidebar():
         if st.button(
             "🔄 Refresh",
             use_container_width=True,
+            type="secondary",
         ):
 
             load_projects()
@@ -86,6 +88,7 @@ def render_sidebar():
         if st.button(
             "🚪 Logout",
             use_container_width=True,
+            type="secondary",
         ):
 
             st.session_state.token = None
